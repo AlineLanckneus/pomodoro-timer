@@ -50,14 +50,19 @@ export class Clock extends Component {
     });
   };
   ResetTimer = () => {
-    console.log('reset timer');
-    if (this.state.timerOn === false) {
+      console.log('reset timer');
+      
+      if (this.state.timerOn === true) {
+        clearInterval(this.timer);
       this.setState({
-        timerStart: 20
+          timerStart: 20,
+          timerOn: false
       });
+        
     }
   };
-  render() {
+    render() {
+        
     return (
       <div>
         <h1>Timer: {this.state.timerStart} </h1>
@@ -70,14 +75,18 @@ export class Clock extends Component {
           </Button>
         </ButtonGroup>
         <ButtonGroup className='btnGroup' orientation='vertical'>
-          <Button variant='contained' onClick={this.StartTimer}>
-            Start
-          </Button>
+          {this.state.timerOn !== true && (
+            <Button variant='contained' onClick={this.StartTimer}>
+              Start
+            </Button>
+          )}
+          {this.state.timerOn === true && (
+            <Button variant='contained' onClick={this.ResetTimer}>
+              Reset
+            </Button>
+          )}
           <Button variant='contained' onClick={this.StopTimer}>
             Stop
-          </Button>
-          <Button variant='contained' onClick={this.ResetTimer}>
-            Reset
           </Button>
         </ButtonGroup>
       </div>

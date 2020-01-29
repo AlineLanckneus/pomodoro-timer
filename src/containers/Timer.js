@@ -9,7 +9,6 @@ const Timer = () => {
     <React.Fragment>
       <h1>Pomodoro Timer</h1>
       <ModalBox />
-      
       <Clock />
     </React.Fragment>
   );
