@@ -1,11 +1,19 @@
-import React, { Component } from 'react';
-import './App.css';
-import Timer from './containers/Timer';
+import React from 'react';
+import Clock from '././components/Clock';
 
-class App extends Component {
-  render() {
-    return <Timer />;
+import ModalBox from '././components/ModalBox';
+import './App.css';
+//import Timer from './containers/Timer';
+
+const App = () => {
+    return (
+      <React.Fragment>
+        <h1>Pomodoro Timer</h1>
+        
+        <Clock />
+      </React.Fragment>
+    );
   }
-}
+
 
 export default App;

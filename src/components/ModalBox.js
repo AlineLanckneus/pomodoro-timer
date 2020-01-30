@@ -7,8 +7,12 @@ class ModalBox extends React.Component {
     return (
       <div className='modalBox'>
         I'm a pop up modal box
-        <Button variant="contained" color="secondary">Close</Button>
-        <Button variant="contained" color="primary">Start New Timer</Button>
+        <Button variant='contained' color='secondary'>
+          Close
+        </Button>
+        <Button variant='contained' color='primary'>
+          Start New Timer
+        </Button>
       </div>
     );
   }

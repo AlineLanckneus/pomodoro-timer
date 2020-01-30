@@ -1,71 +1,89 @@
 import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import ModalBox from './ModalBox';
 //this component will hold state and pass it down to its children
-export class Clock extends Component {
+class Clock extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      timerStart: 20,
-      timerOn: false,
-      timerTime: 0
+      minutes: 20,
+      seconds: 0,
+      timerOn: false
     };
-
-    this.IncrementTime = this.IncrementTime.bind(this);
-    this.DecrementTime = this.DecrementTime.bind(this);
   }
-  StartTimer = () => {
-    console.log('start timer');
-    this.timer = setInterval(
-      () =>
-        this.setState({
-          timerStart: this.state.timerStart - 1,
+
+  startTimer = () =>{
+    this.timer = setInterval(() => {
+      const { seconds, minutes } = this.state;
+
+      if (seconds > 0) {
+        this.setState(({ seconds }) => ({
+          seconds: seconds - 1,
           timerOn: true
-        }),
-      1000
-    );
-  };
-  IncrementTime() {
+        }));
+      }
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(this.timer);
+        } else {
+          this.setState(({ minutes }) => ({
+            timerOn: true,
+            minutes: minutes - 1,
+            seconds: 59
+          }));
+        }
+      }
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    this.setState({ timerOn: false });
+  }
+
+  IncrementTime = () => {
     console.log('increment time');
     if (this.state.timerOn === false) {
       this.setState({
-        timerStart: this.state.timerStart + 1
-      });
-    }
-  }
-  DecrementTime() {
-    console.log('decrement time');
-    if (this.state.timerOn === false) {
-      this.setState({
-        timerStart: this.state.timerStart - 1,
+        minutes: this.state.minutes + 1,
         timerOn: false
       });
     }
-  }
-  StopTimer = () => {
-    console.log('stop timer');
-    clearInterval(this.timer);
-    this.setState({
-      timerOn: false
-    });
   };
-  ResetTimer = () => {
-      console.log('reset timer');
-      
-      if (this.state.timerOn === true) {
-        clearInterval(this.timer);
+  DecrementTime = () => {
+    console.log('decrement time');
+    if (this.state.timerOn === false) {
       this.setState({
-          timerStart: 20,
-          timerOn: false
+        minutes: this.state.minutes - 1,
+        timerOn: false
       });
-        
     }
   };
-    render() {
-        
+  
+  ResetTimer = () => {
+    console.log('reset timer');
+
+    if (this.state.timerOn === true) {
+      clearInterval(this.timer);
+      this.setState({
+        minutes: 20,
+        seconds: 0,
+        timerOn: false
+      });
+    }
+  };
+  render() {
+    const { minutes, seconds, timerOn } = this.state;
     return (
       <div>
-        <h1>Timer: {this.state.timerStart} </h1>
+        {minutes === 0 && seconds <= 45 ? (
+          <ModalBox />
+        ) : null} 
+          <h1>
+            Time Remaining: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}{' '}
+          </h1>
+        
         <ButtonGroup className='btnGroup' orientation='vertical'>
           <Button variant='contained' onClick={this.DecrementTime}>
             -
@@ -75,19 +93,17 @@ export class Clock extends Component {
           </Button>
         </ButtonGroup>
         <ButtonGroup className='btnGroup' orientation='vertical'>
-          {this.state.timerOn !== true && (
-            <Button variant='contained' onClick={this.StartTimer}>
+          {timerOn !== true && (
+            <Button variant='contained' onClick={this.startTimer}>
               Start
             </Button>
           )}
-          {this.state.timerOn === true && (
+          {timerOn === true && (
             <Button variant='contained' onClick={this.ResetTimer}>
               Reset
             </Button>
           )}
-          <Button variant='contained' onClick={this.StopTimer}>
-            Stop
-          </Button>
+          
         </ButtonGroup>
       </div>
     );
