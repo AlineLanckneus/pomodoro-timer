@@ -1,7 +1,5 @@
 import React from 'react';
 import Clock from '././components/Clock';
-
-import ModalBox from '././components/ModalBox';
 import './App.css';
 //import Timer from './containers/Timer';
 
@@ -9,7 +7,6 @@ const App = () => {
     return (
       <React.Fragment>
         <h1>Pomodoro Timer</h1>
-        
         <Clock />
       </React.Fragment>
     );

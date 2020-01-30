@@ -9,11 +9,12 @@ class Clock extends Component {
     this.state = {
       minutes: 20,
       seconds: 0,
-      timerOn: false
+      timerOn: false,
+      showModal: 'display-block'
     };
   }
 
-  startTimer = () =>{
+  startTimer = () => {
     this.timer = setInterval(() => {
       const { seconds, minutes } = this.state;
 
@@ -35,7 +36,7 @@ class Clock extends Component {
         }
       }
     }, 1000);
-  }
+  };
 
   componentWillUnmount() {
     clearInterval(this.timer);
@@ -43,7 +44,7 @@ class Clock extends Component {
   }
 
   IncrementTime = () => {
-    console.log('increment time');
+    
     if (this.state.timerOn === false) {
       this.setState({
         minutes: this.state.minutes + 1,
@@ -52,17 +53,17 @@ class Clock extends Component {
     }
   };
   DecrementTime = () => {
-    console.log('decrement time');
-    if (this.state.timerOn === false) {
+    
+    if (this.state.timerOn === false && this.state.minutes > 0) {
       this.setState({
         minutes: this.state.minutes - 1,
         timerOn: false
       });
     }
   };
-  
+
   ResetTimer = () => {
-    console.log('reset timer');
+    
 
     if (this.state.timerOn === true) {
       clearInterval(this.timer);
@@ -73,17 +74,27 @@ class Clock extends Component {
       });
     }
   };
+  CloseModal = () => {
+    
+    this.setState({
+      showModal: 'display-none'
+    });
+    console.log('close button clicked!');
+  };
   render() {
-    const { minutes, seconds, timerOn } = this.state;
+    const { minutes, seconds, timerOn, showModal } = this.state;
     return (
       <div>
-        {minutes === 0 && seconds <= 45 ? (
-          <ModalBox />
-        ) : null} 
-          <h1>
-            Time Remaining: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}{' '}
-          </h1>
-        
+        {minutes === 0 && seconds <= 50 ? (
+          <ModalBox className= {`${showModal} "modal"`} >
+            <button onClick={this.ResetTimer}>Restart Timer</button>
+            <button onClick={this.CloseModal}>Close</button>
+          </ModalBox>
+        ) : null}
+        <h1>
+          Time Remaining: {minutes}:{seconds < 10 ? `0${seconds}` : seconds}{' '}
+        </h1>
+
         <ButtonGroup className='btnGroup' orientation='vertical'>
           <Button variant='contained' onClick={this.DecrementTime}>
             -
@@ -103,7 +114,6 @@ class Clock extends Component {
               Reset
             </Button>
           )}
-          
         </ButtonGroup>
       </div>
     );
